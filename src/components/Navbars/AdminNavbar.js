@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router';
 import 'react-toastify/dist/ReactToastify.css';
+import Env from '../../Util/Env';
 // reactstrap components
 import {
   Collapse,
@@ -31,7 +32,7 @@ class AdminNavbar extends React.Component {
   }
 
   getProfile = async() => {
-    const url = 'http://localhost:4000/api/users/getUser'
+    const url = Env.HOST + '/api/users/getUser'
     const token = localStorage.getItem('auth-token');
       await fetch(url, {
           method: 'GET',

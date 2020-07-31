@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react'
 import { withRouter } from 'react-router';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import Env from '../../Util/Env';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button,Card,CardHeader,CardBody,CardFooter,CardText,FormGroup,Form,Row,Col,Label
   } from "reactstrap";
@@ -13,7 +15,7 @@ function LoginComponent  (props) {
     var [userPassword, setUserPassword] = useState('');
 
     const onSubmit = async (data, e) => {           
-      const url = 'http://localhost:4000/api/users/authenticationUser'
+      const url = Env.HOST + '/api/users/authenticationUser'
       await fetch(url, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -25,7 +27,7 @@ function LoginComponent  (props) {
               props.history.push('/');
             } else {        
                 const message = data.message.split(':')[1];        
-                mensaje(message);
+                notifyError(message);
                 if(message.trim() === 'Invalid Password') {
                     setUserPassword('');
                 } else {
@@ -35,12 +37,12 @@ function LoginComponent  (props) {
             }
         })
         .catch(error => {
-            mensaje(error);            
+            notifyError(error);            
         });
     };
 
-    const mensaje = (mensaje) => {
-        toast.error(mensaje);
+    const notifyError = (message) => {
+        toast.error(message);
     };
 
     return (
@@ -62,15 +64,16 @@ function LoginComponent  (props) {
                                 <FormGroup>
                                     <Label>Username</Label>
                                     <input  
+                                      autoComplete="off"
                                       value = {userUserName}
-                                       className = 'form-control'
-                                        name = "userUserName"
-                                        placeholder="Username"
-                                        type="text"                                        
-                                        ref = {register( {
-                                            required : {value : true, message: 'Username is required' }
-                                        })}
-                                        onChange = {e => setUserUserName(e.target.value)}
+                                      className = 'form-control mb-1'
+                                      name = "userUserName"
+                                      placeholder="Username"
+                                      type="text"                                        
+                                      ref = {register( {
+                                          required : {value : true, message: 'Username is required' }
+                                      })}
+                                      onChange = {e => setUserUserName(e.target.value)}
                                     />
                                     <Col md='12'>
                                         {
@@ -88,17 +91,18 @@ function LoginComponent  (props) {
                                     <FormGroup>
                                     <Label>Password</Label>
                                     <input
-                                        value = {userPassword}
-                                        className='form-control'  
-                                        placeholder="Password"
-                                        type="password"
-                                        name = "userPassword"
-                                        onChange = { e => setUserPassword(e.target.value)}
-                                        ref = {register( {
-                                            required : {value : true, message: 'Password is required' },
-                                            maxLength: { value: 15, message:'Password must not be more than 15 characters'},
-                                            minLength: { value: 8, message:'Password must not be less than 8 characters'}
-                                        })}
+                                      autoComplete="off"
+                                      value = {userPassword}
+                                      className='form-control mb-1'  
+                                      placeholder="Password"
+                                      type="password"
+                                      name = "userPassword"
+                                      onChange = { e => setUserPassword(e.target.value)}
+                                      ref = {register( {
+                                          required : {value : true, message: 'Password is required' },
+                                          maxLength: { value: 15, message:'Password must not be more than 15 characters'},
+                                          minLength: { value: 8, message:'Password must not be less than 8 characters'}
+                                      })}
                                     />
                                      <Col md='12'>
                                         {
@@ -113,7 +117,7 @@ function LoginComponent  (props) {
                             </Row>           
                             <Row>
                                 <Col className="px-md-5"  md="12">
-                                    <  Label  style={{color:'white'}} href='#'>don't have an account?</  Label>
+                                      <Link className="text-white" to={"/register"} >don't have an account?</Link>
                                 </Col>
                             </Row>        
                         
